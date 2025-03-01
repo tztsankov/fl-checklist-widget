@@ -1,52 +1,408 @@
-// Ultra-compact Fitness Checklist Widget - Fixed Version
+// Fitness Lifestyle Checklist Widget - Enhanced Version
 (function(){
   // Create and append styles
   const style = document.createElement('style');
   style.textContent = `
-    .fl-cw * {margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
-    .fl-cw {position:fixed;bottom:85px;right:20px;z-index:99999;font-size:16px;color:#fff}
-    .fl-min {background:#000;border:2px solid #D7FB00;border-radius:24px;box-shadow:0 0 10px rgba(215,251,0,.5);padding:10px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;max-width:280px}
-    .fl-min:hover {box-shadow:0 0 20px rgba(215,251,0,.7)}
-    .fl-title {font-weight:700;color:#D7FB00;margin-right:8px}
-    .fl-badge {background:#D7FB00;color:#000;font-weight:700;padding:4px 8px;border-radius:50px;font-size:14px}
-    .fl-exp {position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:90%;max-width:500px;max-height:80vh;background:#000;border-radius:24px;border:2px solid #D7FB00;box-shadow:0 0 20px rgba(215,251,0,.5);overflow-y:auto;z-index:100000}
-    .fl-head {display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #333}
-    .fl-wtitle {font-size:22px;font-weight:900}
-    .fl-hilight {color:#D7FB00}
-    .fl-circle {background:#D7FB00;color:#000;font-size:18px;font-weight:700;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(215,251,0,.5)}
-    .fl-box {background:#0E0E0E;border-radius:16px;margin:16px;overflow:hidden}
-    .fl-boxhead {display:flex;justify-content:space-between;padding:10px 16px;background:#111;border-bottom:1px solid #222}
-    .fl-sectitle {font-size:14px;color:#999}
-    .fl-minbtn {cursor:pointer;padding:6px}
-    .fl-items {display:flex;flex-direction:column}
-    .fl-item {display:flex;align-items:center;padding:12px;border-bottom:1px solid #222}
-    .fl-item:hover {background:#1A1A1A}
-    .fl-check {cursor:pointer;margin-right:12px;color:#555}
-    .fl-check.fl-active {color:#D7FB00}
-    .fl-emoji {margin-right:8px}
-    .fl-text {flex-grow:1}
-    .fl-done {text-decoration:line-through;color:#555}
-    .fl-remove {opacity:0;color:#555;cursor:pointer}
-    .fl-item:hover .fl-remove {opacity:1}
-    .fl-remove:hover {color:#ff4d4d}
-    .fl-add {margin:16px}
-    .fl-addbtn {width:100%;background:#111;color:#999;border:1px solid #222;border-radius:16px;padding:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-    .fl-plus {color:#D7FB00}
-    .fl-form {background:#111;border-radius:16px;padding:16px;margin:16px}
-    .fl-emojis {display:flex;overflow-x:auto;gap:8px;margin-bottom:12px}
-    .fl-emoji-opt {width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer}
-    .fl-emoji-sel {background:rgba(215,251,0,.2)}
-    .fl-row {display:flex;align-items:center;gap:8px}
-    .fl-sel-em {font-size:20px}
-    .fl-input {flex-grow:1;background:#222;border:none;border-radius:8px;padding:10px;color:#fff}
-    .fl-input:focus {outline:none;box-shadow:0 0 0 2px rgba(215,251,0,.3)}
-    .fl-submit {background:#D7FB00;color:#000;font-weight:500;padding:8px 14px;border:none;border-radius:8px;cursor:pointer}
-    .fl-submit:disabled {opacity:.5;cursor:not-allowed}
-    .fl-footer {text-align:center;padding:12px;color:#555;font-size:14px}
+    .fl-cw * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    .fl-cw {
+      position: fixed;
+      bottom: 85px;
+      right: 20px;
+      z-index: 99999;
+      font-size: 16px;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+    
+    .fl-min {
+      background: #000;
+      border: 2px solid #D7FB00;
+      border-radius: 24px;
+      box-shadow: 0 0 15px rgba(215, 251, 0, 0.5);
+      padding: 12px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 280px;
+      transition: all 0.3s ease;
+    }
+    
+    .fl-min:hover {
+      box-shadow: 0 0 20px rgba(215, 251, 0, 0.7);
+      transform: translateY(-2px);
+    }
+    
+    .fl-title {
+      font-weight: 700;
+      color: #D7FB00;
+      margin-right: 8px;
+    }
+    
+    .fl-badge {
+      background: #D7FB00;
+      color: #000;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 50px;
+      font-size: 14px;
+    }
+    
+    .fl-exp {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      background: #000;
+      border-radius: 24px;
+      border: 2px solid #D7FB00;
+      box-shadow: 0 0 20px rgba(215, 251, 0, 0.5);
+      overflow-y: auto;
+      z-index: 100000;
+      animation: fl-popup 0.3s ease-out;
+    }
+    
+    @keyframes fl-popup {
+      0% { 
+        opacity: 0; 
+        transform: translate(-50%, -40%);
+      }
+      100% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%);
+      }
+    }
+    
+    .fl-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #333;
+    }
+    
+    .fl-wtitle {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+    
+    .fl-hilight {
+      color: #D7FB00;
+    }
+    
+    .fl-circle {
+      background: #D7FB00;
+      color: #000;
+      font-size: 18px;
+      font-weight: 700;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(215, 251, 0, 0.5);
+    }
+    
+    .fl-box {
+      background: #0E0E0E;
+      border-radius: 16px;
+      margin: 16px;
+      overflow: hidden;
+      border: 1px solid #222;
+    }
+    
+    .fl-boxhead {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: #111;
+      border-bottom: 1px solid #222;
+    }
+    
+    .fl-sectitle {
+      font-size: 14px;
+      color: #999;
+      font-weight: 500;
+    }
+    
+    .fl-minbtn {
+      cursor: pointer;
+      color: #666;
+      font-size: 18px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+    
+    .fl-minbtn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    
+    .fl-items {
+      display: flex;
+      flex-direction: column;
+      max-height: 50vh;
+      overflow-y: auto;
+    }
+    
+    .fl-items::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .fl-items::-webkit-scrollbar-track {
+      background: #0a0a0a;
+      border-radius: 4px;
+    }
+    
+    .fl-items::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 4px;
+    }
+    
+    .fl-items::-webkit-scrollbar-thumb:hover {
+      background: #444;
+    }
+    
+    .fl-item {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid #222;
+      transition: background-color 0.2s;
+    }
+    
+    .fl-item:last-child {
+      border-bottom: none;
+    }
+    
+    .fl-item:hover {
+      background: #1A1A1A;
+    }
+    
+    .fl-check {
+      cursor: pointer;
+      margin-right: 14px;
+      color: #555;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+    
+    .fl-check:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #888;
+    }
+    
+    .fl-check.fl-active {
+      color: #D7FB00;
+    }
+    
+    .fl-emoji {
+      margin-right: 10px;
+      font-size: 18px;
+    }
+    
+    .fl-text {
+      flex-grow: 1;
+      line-height: 1.4;
+    }
+    
+    .fl-done {
+      text-decoration: line-through;
+      color: #555;
+    }
+    
+    .fl-remove {
+      opacity: 0;
+      color: #555;
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+    
+    .fl-item:hover .fl-remove {
+      opacity: 1;
+    }
+    
+    .fl-remove:hover {
+      background: rgba(255, 0, 0, 0.1);
+      color: #ff6b6b;
+    }
+    
+    .fl-add {
+      margin: 16px;
+    }
+    
+    .fl-addbtn {
+      width: 100%;
+      background: #111;
+      color: #999;
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      font-size: 14px;
+    }
+    
+    .fl-addbtn:hover {
+      background: #191919;
+      color: #fff;
+    }
+    
+    .fl-plus {
+      color: #D7FB00;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    
+    .fl-form {
+      background: #111;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 16px;
+      border: 1px solid #222;
+    }
+    
+    .fl-emojis {
+      display: flex;
+      overflow-x: auto;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 4px;
+    }
+    
+    .fl-emojis::-webkit-scrollbar {
+      height: 4px;
+    }
+    
+    .fl-emojis::-webkit-scrollbar-track {
+      background: #0a0a0a;
+      border-radius: 4px;
+    }
+    
+    .fl-emojis::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 4px;
+    }
+    
+    .fl-emoji-opt {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 18px;
+    }
+    
+    .fl-emoji-opt:hover {
+      background: #222;
+    }
+    
+    .fl-emoji-sel {
+      background: rgba(215, 251, 0, 0.2);
+    }
+    
+    .fl-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .fl-sel-em {
+      font-size: 22px;
+    }
+    
+    .fl-input {
+      flex-grow: 1;
+      background: #222;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      color: #fff;
+      font-size: 14px;
+    }
+    
+    .fl-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(215, 251, 0, 0.3);
+    }
+    
+    .fl-submit {
+      background: #D7FB00;
+      color: #000;
+      font-weight: 500;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .fl-submit:hover:not(:disabled) {
+      background: #ecff5b;
+      transform: translateY(-1px);
+    }
+    
+    .fl-submit:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+    
+    .fl-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .fl-footer {
+      text-align: center;
+      padding: 16px;
+      color: #666;
+      font-size: 14px;
+      font-style: italic;
+    }
+    
+    @media (max-width: 600px) {
+      .fl-exp {
+        width: 95%;
+        max-height: 85vh;
+      }
+    }
   `;
   document.head.appendChild(style);
 
-  // Default items
+  // Default items with more detailed descriptions
   const defaultItems = [
     {id: "1", text: "Хидратация", emoji: "💧", done: false},
     {id: "2", text: "Пълноценна храна богата на нутриенти", emoji: "🥩", done: false},
@@ -59,8 +415,11 @@
     {id: "9", text: "Споделяне на успехите в Telegram", emoji: "📘", done: false}
   ];
 
-  // Emoji options
-  const emojis = "🔥 💪 🏆 🎯 ⚡ 🧠 ❤️ 🥗 🍎 🚶 🧘‍♀️ 🏃 🚴 🏊 🥤 🍚".split(" ");
+  // Emoji options - extended set
+  const emojis = [
+    "🔥", "💪", "🏆", "🎯", "⚡", "🧠", "❤️", "🥗", "🍎", "🚶", 
+    "🧘‍♀️", "🏃", "🚴", "🏊", "🥤", "🍚", "⏱️", "📝", "🌱", "✨"
+  ];
 
   // Helper functions for localStorage
   const getItem = (key) => localStorage.getItem(key);
@@ -85,7 +444,7 @@
   // State management
   const state = {
     items: getStoredItems(),
-    minimized: true,
+    minimized: false, // Start with checklist open
     adding: false,
     newText: "",
     newEmoji: "🔥"
@@ -200,7 +559,7 @@
           <div class="fl-box">
             <div class="fl-boxhead">
               <div class="fl-sectitle">ЕЖЕДНЕВНИ ЗАДАЧИ</div>
-              <div class="fl-minbtn">▼</div>
+              <div class="fl-minbtn">✕</div>
             </div>
             
             <div class="fl-items">
@@ -248,7 +607,7 @@
       document.body.appendChild(container);
       
       // Add event listeners after the DOM is updated
-      // Minimize button
+      // Minimize button - now with X icon
       container.querySelector('.fl-minbtn').addEventListener('click', function() {
         state.minimized = true;
         renderWidget();
