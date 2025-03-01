@@ -4,12 +4,12 @@
   const style = document.createElement('style');
   style.textContent = `
     .fl-cw * {margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
-    .fl-cw {position:fixed;bottom:20px;right:20px;z-index:99999;font-size:16px;color:#fff}
+    .fl-cw {position:fixed;bottom:85px;right:20px;z-index:99999;font-size:16px;color:#fff}
     .fl-min {background:#000;border:2px solid #D7FB00;border-radius:24px;box-shadow:0 0 10px rgba(215,251,0,.5);padding:10px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;max-width:280px}
     .fl-min:hover {box-shadow:0 0 20px rgba(215,251,0,.7)}
     .fl-title {font-weight:700;color:#D7FB00;margin-right:8px}
     .fl-badge {background:#D7FB00;color:#000;font-weight:700;padding:4px 8px;border-radius:50px;font-size:14px}
-    .fl-exp {position:fixed;top:10%;left:50%;transform:translateX(-50%);width:90%;max-width:500px;max-height:80vh;background:#000;border-radius:24px;border:2px solid #D7FB00;box-shadow:0 0 20px rgba(215,251,0,.5);overflow-y:auto;z-index:100000}
+    .fl-exp {position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:90%;max-width:500px;max-height:80vh;background:#000;border-radius:24px;border:2px solid #D7FB00;box-shadow:0 0 20px rgba(215,251,0,.5);overflow-y:auto;z-index:100000}
     .fl-head {display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #333}
     .fl-wtitle {font-size:22px;font-weight:900}
     .fl-hilight {color:#D7FB00}
@@ -223,6 +223,7 @@
                 />
                 <button 
                   class="fl-submit" 
+                  id="fl-submit-btn"
                   ${!state.newText.trim() ? 'disabled' : ''}
                 >
                   Добави
@@ -244,7 +245,9 @@
         </div>
       `;
       
-      // Add event listeners
+      document.body.appendChild(container);
+      
+      // Add event listeners after the DOM is updated
       // Minimize button
       container.querySelector('.fl-minbtn').addEventListener('click', function() {
         state.minimized = true;
@@ -287,8 +290,8 @@
         // Focus input after rendering
         setTimeout(() => input.focus(), 0);
         
-        // Add button
-        container.querySelector('.fl-submit').addEventListener('click', addItem);
+        // Add button - Fixed the button click handler
+        document.getElementById('fl-submit-btn').addEventListener('click', addItem);
       } else {
         // Show add form button
         container.querySelector('.fl-addbtn').addEventListener('click', function() {
@@ -296,6 +299,8 @@
           renderWidget();
         });
       }
+      
+      return;
     }
     
     // Add to page
