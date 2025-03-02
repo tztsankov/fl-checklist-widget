@@ -412,7 +412,7 @@
     {id: "6", text: "Проследяване на прогреса", emoji: "📈", done: false},
     {id: "7", text: "Медитация и молитва", emoji: "🧘‍♂️", done: false},
     {id: "8", text: "7-9 часа сън", emoji: "🛌", done: false},
-    {id: "9", text: "Споделяне на успехите в Telegram", emoji: "📘", done: false}
+    {id: "9", text: "Споделяне на прогреса в групата в Telegram", emoji: "📘", done: false}
   ];
 
   // Emoji options - extended set
@@ -515,7 +515,7 @@
       const percent = getPercentage();
       container.innerHTML = `
         <div class="fl-min">
-          <div class="fl-title">Лист с задачи</div>
+          <div class="fl-title">Лист със задачи</div>
           <div class="fl-badge">${percent}%</div>
         </div>
       `;
@@ -593,7 +593,7 @@
             <div class="fl-add">
               <button class="fl-addbtn">
                 <span class="fl-plus">+</span>
-                <span>Добави своя задача</span>
+                <span>Добави задача</span>
               </button>
             </div>
           `}
