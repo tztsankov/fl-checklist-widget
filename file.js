@@ -515,7 +515,7 @@
       const percent = getPercentage();
       container.innerHTML = `
         <div class="fl-min">
-          <div class="fl-title">Лист със задачи</div>
+          <div class="fl-title">ЛИСТ СЪС ЗАДАЧИ</div>
           <div class="fl-badge">${percent}%</div>
         </div>
       `;
